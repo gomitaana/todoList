@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ToDo List</title>
+
+    <!-- CSS -->
+    <link href="./public/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./public/css/style.css" rel="stylesheet">
+    <script src="https://use.fontawesome.com/5e528e6a6f.js"></script>
+
+
+  </head>
+  <body>
+    <body>
+    <!-- *** Content ***-->
+    <div id="login-page">
+      <div class="container">
+      
+          <form class="form-login" action="index.html">
+            <h2 class="form-login-heading">To-Do List</h2>
+            <div class="login-wrap">
+                <!-- *** Add Btn ***-->
+                <div class="col-md-6 col-md-offset-6">
+                  <button id="plusBtn" class="btn pull-right"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button>
+                </div>
+                <!-- *** List ***-->
+                <div class="">
+                  <table class="table">
+                  <tbody>
+                    <tr>
+                      <td>Tarea</td>
+                      <td>Accion</td>
+                    </tr>
+                  </tbody>
+                </table>
+                </div>
+              
+    
+            </div>
+    
+          </form>     
+      
+      </div>
+    </div>
+    
+
+    <!-- Javascripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="./public/js/bootstrap.min.js"></script>
+    <script src="./public/js/moment.js"></script>
+    <script src="./public/js/moment-with-locales.js"></script>
+
+    <script src="./Controller/listController.js"></script>
+    <script src="./Model/listModel.js"></script>
+    <script src="./View/listView.js"></script>
+  </body>
+</html>
