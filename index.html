@@ -11,6 +11,7 @@
     <link href="./public/css/style.css" rel="stylesheet">
     <script src="https://use.fontawesome.com/5e528e6a6f.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <script src="./public/js/tock.js"></script>
 
   </head>
   <body>
@@ -18,7 +19,7 @@
     <a id="downloadAnchorElem" style="display:none"></a>
     <input type='text' id='id1' style="display:none"/>
     <!-- *** Content ***-->
-    <div id="login-page">
+    <div class="login-page">
       <div class="container">
       
           <form class="form-login" action="index.html">
@@ -59,15 +60,12 @@
 
                 </table>
                 </div>
-              
-    
             </div>
     
           </form>     
       
       </div>
     </div>
-
 
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
@@ -138,13 +136,31 @@
 
   </div>
 </div>
-    
+
+<div class="col-md-8 center-block">
+        <h2>Timer</h2>
+        <p>
+            <button id="start">Start</button>
+            <button id="pause">Pause</button>
+            <button id="stop">Stop</button>
+            <button id="reset">Reset</button>
+        </p>
+        <p>
+            <input id="clockface" placeholder="00:00:00">
+        </p>
+        <h2>Countdown</h2>
+        <p>
+            <button id="startCountdown">Start</button> 
+            <button id="stopCountdown">Stop</button> 
+            <button id="pauseCountdown">Pause</button> 
+            <button id="resetCountdown">Reset</button> 
+            <input id="countdown_clock" placeholder="00:00" value="00:02">
+        </p>
+    </div>
 
     <!-- Javascripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="./public/js/bootstrap.min.js"></script>
-    <script src="./public/js/moment.js"></script>
-    <script src="./public/js/moment-with-locales.js"></script>
     <script src="./public/js/sort.js"></script>
     <script src="./items.json"></script>
 
@@ -187,6 +203,61 @@
             document.getElementById('id1').value=this.rowIndex;
         }
     }
+
+    var timer = new Tock({
+                callback: function () {
+                    $('#clockface').val(timer.msToTime(timer.lap()));
+                }
+            });
+
+            $('#start').on('click', function () {
+                timer.start($('#clockface').val());
+            });
+
+            $('#pause').on('click', function () {
+                timer.pause();
+            });
+
+            $('#stop').on('click', function () {
+                timer.stop();
+            });
+
+            $('#reset').on('click', function () {
+                timer.reset();
+                $('#clockface').val('');
+                $('#laptimes').html('');
+            });
+
+            var countdown = Tock({
+                countdown: true,
+                interval: 250,
+                callback: function () {
+                    console.log(countdown.lap() / 1000);
+                    $('#countdown_clock').val(timer.msToTime(countdown.lap()));
+                },
+                complete: function () {
+                    console.log('end');
+                    alert("Time's up!");
+                }
+            });
+
+            $('#startCountdown').on('click', function () {
+                countdown.start($('#countdown_clock').val());
+            });
+
+            $('#pauseCountdown').on('click', function () {
+                countdown.pause();
+            });
+
+            $('#stopCountdown').on('click', function () {
+                countdown.stop();
+            });
+
+            $('#resetCountdown').on('click', function () {
+                countdown.stop();
+                $('#countdown_clock').val('00:02');
+            });
+
   }
   </script>
 

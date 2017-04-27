@@ -1,135 +1,61 @@
-(function (root, factory) {
-  'use strict'
-  if (typeof define === 'function' && define.amd) define([], factory)
-  else if (typeof exports === 'object') module.exports = factory()
-  else root.Timer = factory()
-}(this, function () {
-  'use strict'
 
-  var defaultOptions = {
-    tick    : 1,
-    onstart : null,
-    ontick  : null,
-    onpause : null,
-    onstop  : null,
-    onend   : null
-  }
+        window.onload = function() {
 
-  var Timer = function (options) {
-    if (!(this instanceof Timer)) return new Timer(options)
-    this._ = {
-      id       : +new Date,
-      options  : {},
-      duration : 0,
-      status   : 'initialized',
-      start    : 0,
-      measures : []
-    }
-    for (var prop in defaultOptions) this._.options[prop] = defaultOptions[prop]
-    this.options(options)
-  }
+            var timer = new Tock({
+                callback: function () {
+                    $('#clockface').val(timer.msToTime(timer.lap()));
+                }
+            });
 
-  Timer.prototype.start = function (duration) {
-    if (!+duration && !this._.duration) return this
-    duration && (duration *= 1000)
-    if (this._.timeout && this._.status === 'started') return this
-    this._.duration = duration || this._.duration
-    this._.timeout = setTimeout(end.bind(this), this._.duration)
-    if (typeof this._.options.ontick === 'function')
-      this._.interval = setInterval(function () {
-        trigger.call(this, 'ontick', this.getDuration())
-      }.bind(this), +this._.options.tick * 1000)
-    this._.start = +new Date
-    this._.status = 'started'
-    trigger.call(this, 'onstart', this.getDuration())
-    return this
-  }
+            $('#start').on('click', function () {
+                timer.start($('#clockface').val());
+            });
 
-  Timer.prototype.pause = function () {
-    if (this._.status !== 'started') return this
-    this._.duration -= (+new Date - this._.start)
-    clear.call(this, false)
-    this._.status = 'paused'
-    trigger.call(this, 'onpause')
-    return this
-  }
+            $('#lap').on('click', function () {
+                $('#laptimes').append(timer.msToTime(timer.lap()) + '<br>');
+            });
 
-  Timer.prototype.stop = function () {
-    if (!/started|paused/.test(this._.status)) return this
-    clear.call(this, true)
-    this._.status = 'stopped'
-    trigger.call(this, 'onstop')
-    return this
-  }
+            $('#pause').on('click', function () {
+                timer.pause();
+            });
 
-  Timer.prototype.getDuration = function () {
-    if (this._.status === 'started')
-      return this._.duration - (+new Date - this._.start)
-    if (this._.status === 'paused') return this._.duration
-    return 0
-  }
+            $('#stop').on('click', function () {
+                timer.stop();
+            });
 
-  Timer.prototype.getStatus = function () {
-    return this._.status
-  }
+            $('#reset').on('click', function () {
+                timer.reset();
+                $('#clockface').val('');
+                $('#laptimes').html('');
+            });
 
-  Timer.prototype.options = function (option, value) {
-    if (option && value) this._.options[option] = value
-    if (!value && typeof option === 'object')
-      for (var prop in option)
-        if (this._.options.hasOwnProperty(prop))
-          this._.options[prop] = option[prop]
-    return this
-  }
+            var countdown = Tock({
+                countdown: true,
+                interval: 250,
+                callback: function () {
+                    console.log(countdown.lap() / 1000);
+                    $('#countdown_clock').val(timer.msToTime(countdown.lap()));
+                },
+                complete: function () {
+                    console.log('end');
+                    alert("Time's up!");
+                }
+            });
 
-  Timer.prototype.on = function (option, value) {
-    if (typeof option !== 'string' || typeof value !== 'function') return this
-    if (!(/^on/).test(option))
-      option = 'on' + option
-    if (this._.options.hasOwnProperty(option))
-      this._.options[option] = value
-    return this
-  }
+            $('#startCountdown').on('click', function () {
+                countdown.start($('#countdown_clock').val());
+            });
 
-  Timer.prototype.off = function (option) {
-    if (typeof option !== 'string') return this
-    option = option.toLowerCase()
-    if (option === 'all') {
-      this._.options = defaultOptions
-      return this
-    }
-    if (!(/^on/).test(option)) option = 'on' + option
-    if (this._.options.hasOwnProperty(option))
-      this._.options[option] = defaultOptions[option]
-    return this
-  }
+            $('#pauseCountdown').on('click', function () {
+                countdown.pause();
+            });
 
-  Timer.prototype.measureStart = function (label) {
-    this._.measures[label || ''] = +new Date
-    return this
-  }
+            $('#stopCountdown').on('click', function () {
+                countdown.stop();
+            });
 
-  Timer.prototype.measureStop = function (label) {
-    return +new Date - this._.measures[label || '']
-  }
-
-  function end () {
-    clear.call(this)
-    this._.status = 'stopped'
-    trigger.call(this, 'onend')
-  }
-
-  function trigger (event) {
-    var callback = this._.options[event],
-      args = [].slice.call(arguments, 1)
-    typeof callback === 'function' && callback.apply(this, args)
-  }
-
-  function clear (clearDuration) {
-    clearTimeout(this._.timeout)
-    clearInterval(this._.interval)
-    if (clearDuration === true) this._.duration = 0
-  }
-
-  return Timer
-}))
+            $('#resetCountdown').on('click', function () {
+                countdown.stop();
+                $('#countdown_clock').val('00:02');
+            });
+        }
