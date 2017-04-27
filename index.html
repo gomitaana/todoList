@@ -23,28 +23,33 @@
             <h2 class="form-login-heading">To-Do List</h2>
             <div class="login-wrap">
                 <!-- *** Add Btn ***-->
-                <div class="col-md-6 col-md-offset-6">
-                  <button type="button" class="btn add pull-right" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button>
+                <div class="row btndiv">
+                  <div class="col-md-6">
+                    <button type="button" class="btn add pull-right" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button>
+                  </div>
+                  <div class="col-md-6">
+                    <button type="button" class="btn btn-success action"><i class="fa fa-check" aria-hidden="true"></i>
+    </button>
+                    <button type="button" class="btn btn-primary action"><i class="fa fa-pencil" aria-hidden="true"></i>
+    </button>
+                    <button type="button" class="btn btn-danger action"><i class="fa fa-trash-o" aria-hidden="true"></i>
+    </button>
+                  </div>
                 </div>
                 <!-- *** List ***-->
                 <div class="">
                   <table class="table" id="myTable">
-                  <tbody>
+                  <thead>
                     <tr>
                       <td>Tarea</td>
                       <td>Priority</td>
-                      <td>
-                        <div class="btn-group" role="group" aria-label="...">
-                          <button type="button" class="btn btn-success action"><i class="fa fa-check" aria-hidden="true"></i>
-  </button>
-                          <button type="button" class="btn btn-primary action"><i class="fa fa-pencil" aria-hidden="true"></i>
-  </button>
-                          <button type="button" class="btn btn-danger action"><i class="fa fa-trash-o" aria-hidden="true"></i>
-  </button>
-                        </div>
-                      </td>
+                      <td>Minutes</td>
+                      <td>Due date</td>
                     </tr>
-                  </tbody>
+                  </thead>
+
+                  <tbody></tbody>
+
                 </table>
                 </div>
               
@@ -133,6 +138,7 @@
     <script src="./public/js/bootstrap.min.js"></script>
     <script src="./public/js/moment.js"></script>
     <script src="./public/js/moment-with-locales.js"></script>
+    <script src="./public/js/sort.js"></script>
     <script src="./Model/items.json"></script>
 
     <!-- Include Date Range Picker -->
@@ -148,7 +154,8 @@
         todayHighlight: true,
         autoclose: true,
         orientation: "auto"
-      })
+      });
+      sortTable(1);
     })
 
     $(function () {

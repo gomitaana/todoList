@@ -61,8 +61,10 @@ var Event = function (sender) {
         rebuildList : function () {
             console.log(this._model._items);
             var data = this._model._items;
+            var iter = new Iterator(data);
+            var i = 0;
 
-            for(var i = 0; i< data.length; i++){
+            for (var item = iter.first(); iter.hasNext(); item = iter.next()) {
                 var name = "";
                 var minutes = "";
                 var priority= "";
@@ -81,11 +83,41 @@ var Event = function (sender) {
                       duedate = val;
                     }
                 });
-                $('#myTable').append('<tr><td>'+name+'</td><td>Priority</td><td></td></tr>');
-            }
+                var htmlCode = '<tr><td>'+name+'</td><td>'+priority+'</td><td>'+minutes+'</td><td>'+duedate+'</td></tr>';
+                $('#myTable').append(htmlCode);
+                i++;
+        }
+            
             
             this._model.setSelectedIndex(-1);
             
         }
         
     };
+
+    var Iterator = function(items) {
+        this.index = 0;
+        this.items = items;
+    }
+     
+    Iterator.prototype = {
+        first: function() {
+            this.reset();
+            return this.next();
+        },
+        next: function() {
+            return this.items[this.index++];
+        },
+        hasNext: function() {
+            return this.index <= this.items.length;
+        },
+        reset: function() {
+            this.index = 0;
+        },
+        each: function(callback) {
+            for (var item = this.first(); this.hasNext(); item = this.next()) {
+                callback(item);
+            }
+        }
+    }
+     
