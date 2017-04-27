@@ -60,16 +60,28 @@ var Event = function (sender) {
         
         rebuildList : function () {
             console.log(this._model._items);
-        
-            var key, items, list;
-        
-            items = this._model._items;
-            
-            var list = this._elements.list;
-            list.html('');
-            
-            for(var key in items) {
-                list.append('<option>'+ items[key] + '</option>');
+            var data = this._model._items;
+
+            for(var i = 0; i< data.length; i++){
+                var name = "";
+                var minutes = "";
+                var priority= "";
+                var duedate= "";
+                $.each(data[i], function(key, val) {
+                    if(key == "name"){
+                      name = val;
+                    }
+                    if(key == "minutes"){
+                      minutes = val;
+                    }
+                    if(key == "priority"){
+                      priority = val;
+                    }
+                    if(key == "duedate"){
+                      duedate = val;
+                    }
+                });
+                $('#myTable').append('<tr><td>'+name+'</td><td>Priority</td><td></td></tr>');
             }
             
             this._model.setSelectedIndex(-1);

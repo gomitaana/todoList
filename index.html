@@ -10,7 +10,7 @@
     <link href="./public/css/bootstrap.min.css" rel="stylesheet">
     <link href="./public/css/style.css" rel="stylesheet">
     <script src="https://use.fontawesome.com/5e528e6a6f.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
   </head>
   <body>
@@ -24,15 +24,25 @@
             <div class="login-wrap">
                 <!-- *** Add Btn ***-->
                 <div class="col-md-6 col-md-offset-6">
-                  <button id="plusBtn" class="btn pull-right"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button>
+                  <button type="button" class="btn add pull-right" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button>
                 </div>
                 <!-- *** List ***-->
                 <div class="">
-                  <table class="table">
+                  <table class="table" id="myTable">
                   <tbody>
                     <tr>
                       <td>Tarea</td>
-                      <td>Accion</td>
+                      <td>Priority</td>
+                      <td>
+                        <div class="btn-group" role="group" aria-label="...">
+                          <button type="button" class="btn btn-success action"><i class="fa fa-check" aria-hidden="true"></i>
+  </button>
+                          <button type="button" class="btn btn-primary action"><i class="fa fa-pencil" aria-hidden="true"></i>
+  </button>
+                          <button type="button" class="btn btn-danger action"><i class="fa fa-trash-o" aria-hidden="true"></i>
+  </button>
+                        </div>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -45,6 +55,77 @@
       
       </div>
     </div>
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add a task</h4>
+      </div>
+      <div class="modal-body">
+
+        <form class="form-horizontal">
+          <fieldset>
+
+          <!-- Text input-->
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="name">Name of the task</label>  
+            <div class="col-md-8">
+            <input id="name" name="name" placeholder="Name" class="form-control input-md" required="" type="text">
+              
+            </div>
+          </div>
+
+          <!-- Text input-->
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="time">Time Requiered in minutes</label>  
+            <div class="col-md-8">
+            <input id="time" name="time" placeholder="Time" class="form-control input-md" type="text">
+              
+            </div>
+          </div>
+
+          <!-- Select Basic -->
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="priority">Priority</label>
+            <div class="col-md-8">
+              <select id="priority" name="priority" class="form-control">
+                <option value="1">Low</option>
+                <option value="2">Medium</option>
+                <option value="3">High</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Date input-->
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="duedate">Due Date</label>  
+            <div class="col-md-8">
+              <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
+            </div>
+          </div>
+
+          <!-- Button -->
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="save"></label>
+            <div class="col-md-4">
+              <button id="save" name="save" class="btn btn-success">Save</button>
+            </div>
+          </div>
+
+          </fieldset>
+          </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>
     
 
     <!-- Javascripts -->
@@ -52,6 +133,35 @@
     <script src="./public/js/bootstrap.min.js"></script>
     <script src="./public/js/moment.js"></script>
     <script src="./public/js/moment-with-locales.js"></script>
+    <script src="./Model/items.json"></script>
+
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    
+    <script>
+    $(document).ready(function(){
+      var date_input=$('input[name="date"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      date_input.datepicker({
+        format: 'mm/dd/yyyy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+        orientation: "auto"
+      })
+    })
+
+    $(function () {
+        var model = new ListModel(),
+            view = new ListView(model, {
+                'list' : $('#list'), 
+                'addButton' : $('#plusBtn'), 
+                'delButton' : $('#minusBtn')
+            }),
+            controller = new ListController(model, view);
+        view.show();
+    });
+  </script>
 
     <script src="./Controller/listController.js"></script>
     <script src="./Model/listModel.js"></script>

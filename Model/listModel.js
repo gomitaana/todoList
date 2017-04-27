@@ -1,5 +1,6 @@
 var ListModel = function(items) {
-        this._items = items;
+        var mydata = JSON.parse(data);
+        this._items = mydata;
         this._selectedIndex = -1;
         
         this.addItemEvent = new Event(this);
@@ -22,6 +23,7 @@ var ListModel = function(items) {
         },
         
         getItems: function () {
+            var mydata = JSON.parse(data);
             return [].concat(this._items);
         },
         
