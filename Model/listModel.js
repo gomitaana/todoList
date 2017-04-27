@@ -14,7 +14,7 @@ var ListModel = function(items) {
         
         addItem : function (item) {
             var factory = new Factory();
-            factory.createtask(item);
+            //factory.createtask(item);
 
             this._items.push(JSON.parse(item));
             var dataString = "data = \'" + JSON.stringify(this._items) + "\';"

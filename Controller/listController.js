@@ -35,6 +35,7 @@ var ListController = function (model, view) {
             var duedate = document.getElementById("date").value;
 
             var item = '{"name": "'+name+'","minutes":'+minutes+',"priority": "'+priority+'","duedate": "'+duedate+'","totaltime":0.0,"complete":false}';
+            console.log(item);
             this._model.addItem(item);
         },
         
