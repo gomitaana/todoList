@@ -15,6 +15,8 @@
   </head>
   <body>
     <body>
+    <a id="downloadAnchorElem" style="display:none"></a>
+    <input type='text' id='id1' style="display:none"/>
     <!-- *** Content ***-->
     <div id="login-page">
       <div class="container">
@@ -22,17 +24,21 @@
           <form class="form-login" action="index.html">
             <h2 class="form-login-heading">To-Do List</h2>
             <div class="login-wrap">
-                <!-- *** Add Btn ***-->
                 <div class="row btndiv">
-                  <div class="col-md-6">
-                    <button type="button" class="btn add pull-right" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button>
-                  </div>
-                  <div class="col-md-6">
-                    <button type="button" class="btn btn-success action"><i class="fa fa-check" aria-hidden="true"></i>
+                  <div class="col-md-6 col-md-offset-6">
+                  <!-- *** Add Btn ***-->
+                    <button type="button" class="btn add" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button>
+<!-- *** Complete Btn ***-->
+                    <button type="button" id="completeBtn" class="btn btn-success action"><i class="fa fa-check" aria-hidden="true"></i>
     </button>
+<!-- *** Edit Btn ***-->
                     <button type="button" class="btn btn-primary action"><i class="fa fa-pencil" aria-hidden="true"></i>
     </button>
-                    <button type="button" class="btn btn-danger action"><i class="fa fa-trash-o" aria-hidden="true"></i>
+<!-- *** Delete Btn ***-->
+                    <button type="button" id="minusBtn" class="btn btn-danger action"><i class="fa fa-trash-o" aria-hidden="true"></i>
+    </button>
+<!-- *** Start Clock Btn ***-->
+                    <button type="button" class="btn btn-warning action"><i class="fa fa-clock-o" aria-hidden="true"></i>
     </button>
                   </div>
                 </div>
@@ -45,6 +51,7 @@
                       <td>Priority</td>
                       <td>Minutes</td>
                       <td>Due date</td>
+                      <td>Total Time</td>
                     </tr>
                   </thead>
 
@@ -74,7 +81,7 @@
       </div>
       <div class="modal-body">
 
-        <form class="form-horizontal">
+        <div class="form-horizontal">
           <fieldset>
 
           <!-- Text input-->
@@ -100,9 +107,9 @@
             <label class="col-md-4 control-label" for="priority">Priority</label>
             <div class="col-md-8">
               <select id="priority" name="priority" class="form-control">
-                <option value="1">Low</option>
-                <option value="2">Medium</option>
-                <option value="3">High</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
               </select>
             </div>
           </div>
@@ -119,12 +126,12 @@
           <div class="form-group">
             <label class="col-md-4 control-label" for="save"></label>
             <div class="col-md-4">
-              <button id="save" name="save" class="btn btn-success">Save</button>
+              <button id="plusBtn" name="save" class="btn btn-success">Save</button>
             </div>
           </div>
 
           </fieldset>
-          </form>
+          </div>
 
       </div>
     </div>
@@ -139,13 +146,14 @@
     <script src="./public/js/moment.js"></script>
     <script src="./public/js/moment-with-locales.js"></script>
     <script src="./public/js/sort.js"></script>
-    <script src="./Model/items.json"></script>
+    <script src="./items.json"></script>
 
     <!-- Include Date Range Picker -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     
     <script>
     $(document).ready(function(){
+      document.getElementById('id1').value="0";
       var date_input=$('input[name="date"]'); //our date input has the name "date"
       var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
       date_input.datepicker({
@@ -159,15 +167,27 @@
     })
 
     $(function () {
-        var model = new ListModel(),
+        var model = new ListModel(JSON.parse(data)),
             view = new ListView(model, {
                 'list' : $('#list'), 
                 'addButton' : $('#plusBtn'), 
-                'delButton' : $('#minusBtn')
+                'delButton' : $('#minusBtn'),
+                'completeButton' : $('#completeBtn')
             }),
             controller = new ListController(model, view);
         view.show();
     });
+
+    onload = function() {
+    if (!document.getElementsByTagName || !document.createTextNode) return;
+    var rows = document.getElementById('myTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+    for (i = 0; i < rows.length; i++) {
+        rows[i].onclick = function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            document.getElementById('id1').value=this.rowIndex;
+        }
+    }
+  }
   </script>
 
     <script src="./Controller/listController.js"></script>

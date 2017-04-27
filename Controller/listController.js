@@ -9,12 +9,17 @@ var ListController = function (model, view) {
         });
         
         this._view.deleteItemEvent.attach(function () {
-            var index = self._model.getSelectedIndex();
+            var index = $("#id1").val();
             self.deleteItem(index);
+        });
+
+        this._view.completeItemEvent.attach(function () {
+            var index = $("#id1").val();
+            self.completeItem(index);
         });
         
         this._view.setSelectedIndexEvent.attach(function (sender, data) {
-            var index = data.index;
+            var index = $("#id1").val();
             self.setSelectedIndex(index);
         });
         
@@ -23,13 +28,22 @@ var ListController = function (model, view) {
         
     ListController.prototype = {
         
-        addItem : function () {
-            var item = window.prompt("enter item name", "");
+        addItem : function () {       
+            var name = document.getElementById("name").value;
+            var minutes = document.getElementById("time").value;
+            var priority = document.getElementById("priority").value;
+            var duedate = document.getElementById("date").value;
+
+            var item = '{"name": "'+name+'","minutes":'+minutes+',"priority": "'+priority+'","duedate": "'+duedate+'","totaltime":0.0,"complete":false}';
             this._model.addItem(item);
         },
         
         deleteItem : function (index) {
             this._model.deleteItem(index);
+        },
+
+        completeItem : function (index) {
+            this._model.completeItem(index);
         },
         
         setSelectedIndex : function (index) {

@@ -40,3 +40,10 @@ body {
 .btndiv{
 	padding-top: 10px;
 }
+.complete{
+	text-decoration: line-through;
+}
+.selected {
+    background-color: #d3d3d3;
+    color: #FFF;
+}

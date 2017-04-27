@@ -24,6 +24,7 @@ var Event = function (sender) {
         this.addItemEvent = new Event(this);
         this.deleteItemEvent = new Event(this);
         this.setSelectedIndexEvent = new Event(this);
+        this.completeItemEvent = new Event(this);
         
         
         var self = this;
@@ -33,6 +34,10 @@ var Event = function (sender) {
         });
         
         this._model.deleteItemEvent.attach(function (){
+            self.rebuildList();
+        });
+
+        this._model.completeItemEvent.attach(function (){
             self.rebuildList();
         });
         
@@ -48,6 +53,10 @@ var Event = function (sender) {
         
         this._elements.delButton.click(function () {
            self.deleteItemEvent.notify();
+        });
+
+        this._elements.completeButton.click(function () {
+           self.completeItemEvent.notify();
         });
         
     };
@@ -68,7 +77,8 @@ var Event = function (sender) {
                 var name = "";
                 var minutes = "";
                 var priority= "";
-                var duedate= "";
+                var duedate= "",complete = "";
+                var totaltime = "" ,alarm = "";
                 $.each(data[i], function(key, val) {
                     if(key == "name"){
                       name = val;
@@ -82,13 +92,26 @@ var Event = function (sender) {
                     if(key == "duedate"){
                       duedate = val;
                     }
+                    if(key == "totaltime"){
+                      totaltime = val;
+                    }
+                    if(key == "alarm"){
+                      alarm = val;
+                    }
+                    if(key == "complete"){
+                      complete = val;
+                    }
                 });
-                var htmlCode = '<tr><td>'+name+'</td><td>'+priority+'</td><td>'+minutes+'</td><td>'+duedate+'</td></tr>';
-                $('#myTable').append(htmlCode);
+
+                var htmlCode = "";
+                if(complete == true){
+                    htmlCode = '<tr class="complete"><td>'+name+'</td><td>'+priority+'</td><td>'+minutes+'</td><td>'+duedate+'</td><td>'+totaltime+'</td></tr>';
+                }else{
+                    htmlCode = '<tr class=""><td>'+name+'</td><td>'+priority+'</td><td>'+minutes+'</td><td>'+duedate+'</td><td>'+totaltime+'</td></tr>';
+                }
+                    $('#myTable').append(htmlCode);
                 i++;
         }
-            
-            
             this._model.setSelectedIndex(-1);
             
         }
@@ -119,5 +142,4 @@ var Event = function (sender) {
                 callback(item);
             }
         }
-    }
-     
+    }     
