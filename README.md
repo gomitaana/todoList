@@ -76,3 +76,24 @@ Everytime a user add a task the application used the factory pattern, I divide t
 ```
 
 For the GUI I used two patterns the Observer to listen everytime a model change and a command pattern to interact with the timer and the buttons.
+
+```
+var Event = function (sender) {
+        this._sender = sender;
+        this._listeners = [];
+    }
+    
+    Event.prototype = {
+      
+        attach: function (listener) {
+            this._listeners.push(listener);
+        },
+        
+        notify : function (args) {
+            for(var i = 0; i < this._listeners.length; i += 1) {
+             this._listeners[i](this._sender, args);   
+            }
+        }
+        
+    };
+```
